@@ -43,15 +43,27 @@ impl Registers {
         self.e = (value & 0xFF) as u8;
     }
 
-    pub fn hl(&mut self, value: u16) {
+    // Reading a 16-bit pair
+    pub fn hl(&self) -> u16 {
         (self.h as u16) << 8 | self.l as u16
     }
 
-    pub fn set_hl() {}
+    // Writing a 16-bit pair
+    pub fn set_hl(&mut self, value: u16) {
+        self.h = (value >> 8) as u8;
+        self.l = (value & 0xFF) as u8;
+    }
 
-    pub fn af() {}
+    // Reading a 16-bit pair
+    pub fn af(&self) -> u16 {
+        (self.a as u16) << 8 | self.f as u16
+    }
 
-    pub fn set_af() {}
+    // Writing a 16-bit pair
+    pub fn set_af(&mut self, value: u16) {
+        self.a = (value >> 8) as u8;
+        self.f = (value & 0xF0) as u8;
+    }
 
     /*
      * Flag helpers
