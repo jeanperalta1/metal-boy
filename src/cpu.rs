@@ -83,4 +83,36 @@ impl Registers {
     pub fn flag_c(&self) -> bool {
         self.f & 0x10 != 0
     }
+
+    pub fn set_flag_z(&mut self, on: bool) {
+        if on {
+            self.f |= 0x80;
+        } else {
+            self.f &= !0x80;
+        }
+    }
+
+    pub fn set_flag_n(&mut self, on: bool) {
+        if on {
+            self.f |= 0x40;
+        } else {
+            self.f &= !0x40;
+        }
+    }
+
+    pub fn set_flag_h(&mut self, on: bool) {
+        if on {
+            self.f |= 0x20;
+        } else {
+            self.f &= !0x20;
+        }
+    }
+
+    pub fn set_flag_c(&mut self, on: bool) {
+        if on {
+            self.f |= 0x10;
+        } else {
+            self.f &= !0x10;
+        }
+    }
 }
