@@ -116,3 +116,30 @@ impl Registers {
         }
     }
 }
+
+pub struct CPU {
+    pub registers: Registers,
+    pub cycles: u32,
+    pub halted: bool,
+}
+
+impl CPU {
+    pub fn new() -> Self {
+        CPU {
+            registers: Registers {
+                a: 0x01,
+                f: 0xB0,
+                b: 0x00,
+                c: 0x13,
+                d: 0x00,
+                e: 0xD8,
+                h: 0x01,
+                l: 0x4D,
+                sp: 0xFFFE,
+                pc: 0x0100,
+            },
+            cycles: 0,
+            halted: false,
+        }
+    }
+}
