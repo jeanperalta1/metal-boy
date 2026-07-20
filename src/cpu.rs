@@ -1,3 +1,5 @@
+use crate::bus::Bus;
+
 /*
  * Create and model the registers
  * 8-bit registers: A B C D E F H L
@@ -121,6 +123,7 @@ pub struct CPU {
     pub registers: Registers,
     pub cycles: u32,
     pub halted: bool,
+    pub bus: Bus,
 }
 
 impl CPU {
@@ -140,6 +143,70 @@ impl CPU {
             },
             cycles: 0,
             halted: false,
+            bus: Bus::new(),
+        }
+    }
+
+    // Represents a full CPU cycle
+    pub fn step(&mut self) {
+        let opcode = self.fetch();
+        self.execute(opcode);
+    }
+
+    /*
+     * 1. Reads byte sitting at whatever address PC is pointing too and that byte is the next
+     *    instruction
+     * 2. Increments PC to point to the next byte
+     */
+    fn fetch(&mut self) -> u8 {
+        let byte = self.bus.read(self.registers.pc);
+        self.registers.pc = self.registers.pc.wrapping_add(1);
+        byte
+    }
+
+    /*
+     * Takes the opcode byte that fetch returned and decides what to do with it
+     * Matches 0x00 -> NOP -> adds 4 cycles
+     */
+    fn execute(&mut self, opcode: u8) {
+        match opcode {
+            0x00 => {
+                self.cycles += 4;
+            }
+            // Implementing the Load Instructions
+            // LD A, n: Fetch next byte and put into A
+            0x06 => {
+                self.registers.b = self.fetch();
+                self.cycles += 8;
+            }
+            0x0E => {
+                self.registers.c = self.fetch();
+                self.cycles += 8;
+            }
+            0x16 => {
+                self.registers.d = self.fetch();
+                self.cycles += 8;
+            }
+            0x1E => {
+                self.registers.e = self.fetch();
+                self.cycles += 8;
+            }
+            0x26 => {
+                self.registers.h = self.fetch();
+                self.cycles += 8;
+            }
+            0x2E => {
+                self.registers.l = self.fetch();
+                self.cycles += 8;
+            }
+            0x3E => {
+                self.registers.a = self.fetch();
+                self.cycles += 8;
+            }
+
+            _ => {
+                panic!("Unknown opcode: 0x{:02X}", opcode);
+            }
         }
     }
 }
