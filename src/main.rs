@@ -15,4 +15,5 @@ fn main() {
 
     let rom_path = &args[1];
     println!("Loading ROM: {}", rom_path);
+    println!("Extra random space");
 }
